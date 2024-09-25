@@ -1,9 +1,3 @@
-//=============================================================================
-//  JIANPU plugin for MuseScore.  
-//  Dean Wedel and Ryan Isaac
-//  
-//=============================================================================
-
 import QtQuick 2.2
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
@@ -120,7 +114,7 @@ MuseScore {
             var endStaff;
             var endTick;
             var fullScore = false;
-            var oneSpace = "                                              "; // because we can't use .repeat in this code for repeating spaces 
+            var oneSpace = "                                              "; 
             if (!cursor.segment) { // no selection
                   fullScore = true;
                   startStaff = 0; // start with 1st staff and end with last
@@ -178,9 +172,9 @@ MuseScore {
                                           {
                                                 // do jianpu
 
-//=============================================================================
+
 //                             DETERMINE JIANPU NUMBER
-//=============================================================================
+
                                                 var tpcNames = "FCGDAEB";
                                                 var name = tpcNames[(note.tpc + 1) % 7]; // name is the ABC for the NOTE we are on
                                                 //console.log("cursor.keySignature " + cursor.keySignature)
@@ -193,9 +187,9 @@ MuseScore {
                                                 var scale = scales[cursor.keySignature+7]; //scale is the ABC of our current key signature
                                                 var jpText = ""+((names.indexOf(name) - names.indexOf(scale) +28)%7+1);// this is the JIANPU NUMBER for further use below
                                                 
-//=============================================================================
+
 //                              MAIN JIANPU DRAWING
-//=============================================================================
+
                                                 var text0 = newElement(Element.STAFF_TEXT); //text0 is the main jianpu
                                                 text0.pos.x = 0; /*-2.5 * (graceChords.length - i); //shift to the right for each 
                                                       subsequent note in the chord, this should be nonfunctional if we're 
@@ -203,9 +197,9 @@ MuseScore {
                                                 text0.pos.y = yOff + 0.0; // this is the position above the line for the jianpu note. yOff is already inverted
                                                 text0.text = jpText;
                                                 console.log("jpText = " + jpText + ", octave = " + octave + ", ticks =" + cursor.element.duration.ticks)
-//=============================================================================
+
 //                                DOTTED NOTES
-//=============================================================================
+
                                                 if (cursor.element.duration.ticks < 960) //we don't want to add dots to longer notes
                                                 {
                                                       var dots = note.dotsCount
@@ -215,9 +209,9 @@ MuseScore {
                                                       }
                                                 }
                                                 cursor.add(text0); //finish main jianpu drawing
-//=============================================================================
+
 //           AFTER-DASHES on long notes (Half, dotted Half, and Whole)
-//=============================================================================
+
                                                 // for the half through whole notes, first determine if there's another note or rest in this measure. 
                                                 // If so, we can centre the dashes between this note and the next. Otherwise, we'll centre the 
                                                 // dashes between this note and the end barline for this measure.
@@ -282,9 +276,9 @@ MuseScore {
                                                       text2.text="<font size=\"7\"/>—"; //</font> half
                                                       cursor.add(text2);
                                                 }
-//=============================================================================
+
 //                 UNDERLINES on short notes (Eighth and shorter)
-//=============================================================================
+
                                                 // underlines for short notes (eighth and shorter)
                                                 else if (cursor.element.duration.ticks==240 || cursor.element.duration.ticks==360 || cursor.element.duration.ticks==420) // EIGHTH or DOTTED EIGHTH
                                                 {     //2018-04-04 decided to revamp following feature; instead of underlining the jianpu number, we'll add an
@@ -331,9 +325,9 @@ MuseScore {
                                                       cursor.add(text3);
                                                 }
 
-//=============================================================================
+
 //                           BEAMS (JIANPU UNDERLINE)
-//=============================================================================
+
 // this doesn't beam rests; rest to rest beaming shouldn't exist, but eighth note to eighth rest should be able to beam somehow... Later project.
 // 2018-01-23 added a no-width space to the beginning of each set of underlined spaces. On opening a file,
 // MuseScore won't recognize a stafftext which contains only standard space characters.
@@ -389,9 +383,9 @@ MuseScore {
                                                       lastBeamTicks = cursor.element.duration.ticks
                                                 }
 
-//=============================================================================
+
 //                                  SHARPS and FLATS
-//=============================================================================
+
                                                 var noteKey = (note.pitch - scaleTwelveC[cursor.keySignature+7]) % 12; 
                                                 //noteKey is range 0 to 11 by half-steps, DO is 0
                                                 var isSharp = false
@@ -455,9 +449,9 @@ MuseScore {
                                                 }
                                                 
                                                 
-//=============================================================================
+
 //                         UPPER and LOWER OCTAVE DOTS
-//=============================================================================
+
                                                 // octave is an integer with the number of dots needed (-down, +up)
                                                 var o = octave
                                                 for (; o < 0; o++)
@@ -489,9 +483,9 @@ MuseScore {
                                                       cursor.add(text);
                                                 }
                                                 
-//=============================================================================
+
 //                            TIES (development)
-//=============================================================================
+
                                                
                                                 //later project 
                                                 if (note.tieBack || note.tieFor) {
@@ -503,9 +497,9 @@ MuseScore {
                                     }
                               }
 
-//=============================================================================
+
 //                                  RESTS
-//=============================================================================
+
                               else if (voice==0) /*if (cursor.element.type == Element.CHORDREST)*/
                               {
                                     console.log("Rest");
@@ -594,9 +588,9 @@ MuseScore {
                   }
             }
 
-//=============================================================================
+
 //                               BARLINES
-//=============================================================================
+
             var cursor2 = curScore.newCursor()
             var lastMeasureX = 0
             cursor2.rewind(1) // if no selection, beginning of score
